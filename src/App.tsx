@@ -7,14 +7,16 @@ import { createContext, useEffect, useState } from "react";
 import { GlobalContextType, User } from "./types";
 import axios from "axios";
 import Loader from "./components/Loader";
+import Admin from "./Pages/Admin";
 export const backendUrl = "http://localhost:5000";
 export const GlobalContext = createContext<GlobalContextType | null>(null);
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [loggedInUser, setLoggedInUser] = useState<User | null>(null);
+  const [isAdmin,setIsAdmin] = useState<boolean>(false);
   const [isLoading,setIsLoading] = useState<boolean>(false);
-
+  
   useEffect(() => {
     const getLoggedInUser = async () => {
       try {
@@ -24,6 +26,7 @@ function App() {
         })
         console.log(response);
         setLoggedInUser(response.data.user);
+        setIsAdmin(response.data.user.isAdmin);
         setIsLoggedIn(true);
       } catch (error) {
         console.log(error);
@@ -52,6 +55,8 @@ function App() {
         setIsLoggedIn,
         loggedInUser,
         setLoggedInUser,
+        isAdmin,
+        setIsAdmin,
       }}>
         <Router>
           <Routes>
@@ -59,6 +64,7 @@ function App() {
               <Route index element={<Home />} />
               <Route path="register" element={isLoggedIn ? <Navigate to="/"/> : <Register />} />
               <Route path="login" element={isLoggedIn ? <Navigate to="/"/> : <Login />} />
+              <Route path="admin" element={(isLoggedIn && isAdmin) ? <Admin/> : <Navigate to="/"/>}/>
             </Route>
           </Routes>
         </Router>

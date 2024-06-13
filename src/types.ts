@@ -12,9 +12,16 @@ export type User = {
     city?:string;
 }
 
+export type Cuisine = {
+    _id:string;
+    cuisineName:string;
+}
+
 export type GlobalContextType = {
     isLoggedIn:boolean;
     setIsLoggedIn:React.Dispatch<SetStateAction<boolean>>;
     loggedInUser:User | null;
     setLoggedInUser:React.Dispatch<SetStateAction<User | null>>;
+    isAdmin:boolean;
+    setIsAdmin:React.Dispatch<SetStateAction<boolean>>;
 }
