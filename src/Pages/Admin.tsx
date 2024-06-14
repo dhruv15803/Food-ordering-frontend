@@ -1,16 +1,16 @@
-import { backendUrl } from "@/App";
+import { GlobalContext, backendUrl } from "@/App";
 import AdminCuisineCard from "@/components/AdminCuisineCard";
 import Pagination from "@/components/Pagination";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Cuisine } from "@/types";
+import { Cuisine, GlobalContextType } from "@/types";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 const Admin = () => {
   const [cuisineName, setCuisineName] = useState<string>("");
   const [cuisineErrorMsg, setCuisineErrorMsg] = useState<string>("");
-  const [cuisines, setCuisines] = useState<Cuisine[]>([]);
+  const {cuisines,setCuisines} = useContext(GlobalContext) as GlobalContextType;
   const cuisinePerPage = 5;
   const [currentPage, setCurrentPage] = useState<number>(1);
 
@@ -63,20 +63,6 @@ const Admin = () => {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    const fetchCuisines = async () => {
-      try {
-        const response = await axios.get(
-          `${backendUrl}/api/admin/getAllCuisines`
-        );
-        setCuisines(response.data.cuisines);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchCuisines();
-  }, []);
 
   useEffect(() => {
     if (currentCuisines.length === 0 && currentPage > 1) {

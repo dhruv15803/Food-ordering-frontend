@@ -1,4 +1,4 @@
-import { SetStateAction } from "react";
+import React, { SetStateAction } from "react";
 
 export type User = {
     _id:string;
@@ -29,4 +29,8 @@ export type GlobalContextType = {
     setLoggedInUser:React.Dispatch<SetStateAction<User | null>>;
     isAdmin:boolean;
     setIsAdmin:React.Dispatch<SetStateAction<boolean>>;
+    cuisines:Cuisine[];
+    setCuisines:React.Dispatch<SetStateAction<Cuisine[]>>;
+    cities:City[];
+    setCities:React.Dispatch<SetStateAction<City[]>>;
 }

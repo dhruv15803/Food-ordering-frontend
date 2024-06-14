@@ -1,16 +1,16 @@
-import { backendUrl } from "@/App";
+import { GlobalContext, backendUrl } from "@/App";
 import AdminCityCard from "@/components/AdminCityCard";
 import Pagination from "@/components/Pagination";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { City } from "@/types";
+import { City, GlobalContextType } from "@/types";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 const AdminCity = () => {
   const [cityName, setCityName] = useState<string>("");
   const [cityErrorMsg, setCityErrorMsg] = useState<string>("");
-  const [cities, setCities] = useState<City[]>([]);
+  const {cities,setCities} = useContext(GlobalContext) as GlobalContextType;
   const [currentPage, setCurrentPage] = useState<number>(1);
   const citiesPerPage = 5;
 
@@ -55,20 +55,6 @@ const AdminCity = () => {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    const fetchCities = async () => {
-      try {
-        const response = await axios.get(
-          `${backendUrl}/api/admin/getAllCities`
-        );
-        setCities(response.data.cities);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchCities();
-  }, []);
 
   useEffect(() => {
     if (currentCities.length === 0 && currentPage > 1) {
