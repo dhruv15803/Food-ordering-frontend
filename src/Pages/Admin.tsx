@@ -20,6 +20,7 @@ const Admin = () => {
     indexOfFirstCuisine,
     indexOfLastCuisine
   );
+  const noOfPages = Math.ceil(cuisines.length / cuisinePerPage);
 
   const addCuisine = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
@@ -77,11 +78,14 @@ const Admin = () => {
     fetchCuisines();
   }, []);
 
+  useEffect(() => {
+    if (currentCuisines.length === 0 && currentPage > 1) {
+      setCurrentPage((prev) => prev - 1);
+    }
+  }, [currentCuisines]);
+
   return (
     <>
-      <div className="flex items-center w-[80%] mx-auto my-16 text-xl font-semibold">
-        Admin panel
-      </div>
       <div className="flex flex-col p-4 w-[80%] mx-auto border-2">
         <div className="flex items-center text-xl mb-4">Manage cuisines</div>
         <form
@@ -112,12 +116,13 @@ const Admin = () => {
             />
           );
         })}
-        <Pagination
-          cuisinePerPage={cuisinePerPage}
-          currentPage={currentPage}
-          cuisines={cuisines}
-          setCurrentPage={setCurrentPage}
-        />
+        {noOfPages > 1 && (
+          <Pagination
+            noOfPages={noOfPages}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+          />
+        )}
       </div>
     </>
   );

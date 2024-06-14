@@ -17,6 +17,11 @@ export type Cuisine = {
     cuisineName:string;
 }
 
+export type City = {
+    _id:string;
+    cityName:string;
+}
+
 export type GlobalContextType = {
     isLoggedIn:boolean;
     setIsLoggedIn:React.Dispatch<SetStateAction<boolean>>;

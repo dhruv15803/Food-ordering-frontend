@@ -55,7 +55,7 @@ const Navbar = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                     <DropdownMenuItem>Profile</DropdownMenuItem>
-                    <DropdownMenuItem>Manage restaurant</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/partner/restaurant')}>Manage restaurant</DropdownMenuItem>
                     {isAdmin && <DropdownMenuItem onClick={() => navigate('/admin')}>Admin panel</DropdownMenuItem>}
                 </DropdownMenuContent>
               </DropdownMenu>

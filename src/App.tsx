@@ -8,6 +8,9 @@ import { GlobalContextType, User } from "./types";
 import axios from "axios";
 import Loader from "./components/Loader";
 import Admin from "./Pages/Admin";
+import AdminLayout from "./Layout/AdminLayout";
+import AdminCity from "./Pages/AdminCity";
+import RestaurantRegister from "./Pages/RestaurantRegister";
 export const backendUrl = "http://localhost:5000";
 export const GlobalContext = createContext<GlobalContextType | null>(null);
 
@@ -64,7 +67,11 @@ function App() {
               <Route index element={<Home />} />
               <Route path="register" element={isLoggedIn ? <Navigate to="/"/> : <Register />} />
               <Route path="login" element={isLoggedIn ? <Navigate to="/"/> : <Login />} />
-              <Route path="admin" element={(isLoggedIn && isAdmin) ? <Admin/> : <Navigate to="/"/>}/>
+              <Route path="admin" element={<AdminLayout/>}>
+                <Route index element={<Admin/>}/>
+                <Route path="city" element={<AdminCity/>}/>
+              </Route>
+              <Route path="partner/restaurant" element={<RestaurantRegister/>}/>
             </Route>
           </Routes>
         </Router>
