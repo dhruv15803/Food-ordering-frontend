@@ -37,34 +37,54 @@ const RestaurantMenu = () => {
   const [foodItemDescription, setFoodItemDescription] = useState<string>("");
   const [foodItemPrice, setFoodItemPrice] = useState<number>(0);
   const [foodItemCuisine, setFoodItemCuisine] = useState<string>("");
-  
+
   const addFoodItem = async () => {
     try {
-        if (
-            foodItemName.trim() === "" ||
-            foodItemDescription.trim() === "" ||
-            foodItemCuisine.trim() === "" ||
-            foodItemPrice === 0
-          ) {
-            return;
-          }
-          const response = await axios.post(`${backendUrl}/api/foodItem/add`, {
-            foodItemName,
-            foodItemDescription,
-            foodItemPrice,
-            foodItemCuisine,
-            restaurantId: selectedRestaurant?._id,
-          },{
-              withCredentials:true
-          });
-          console.log(response);
-          setFoodItems(prev => [...prev,response.data.newFoodItem]);
-          setFoodItemName("");
-          setFoodItemDescription("");
-          setFoodItemCuisine("");
-          setFoodItemPrice(0);
+      if (
+        foodItemName.trim() === "" ||
+        foodItemDescription.trim() === "" ||
+        foodItemCuisine.trim() === "" ||
+        foodItemPrice === 0
+      ) {
+        return;
+      }
+      const response = await axios.post(
+        `${backendUrl}/api/foodItem/add`,
+        {
+          foodItemName,
+          foodItemDescription,
+          foodItemPrice,
+          foodItemCuisine,
+          restaurantId: selectedRestaurant?._id,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(response);
+      setFoodItems((prev) => [...prev, response.data.newFoodItem]);
+      setFoodItemName("");
+      setFoodItemDescription("");
+      setFoodItemCuisine("");
+      setFoodItemPrice(0);
     } catch (error) {
-        console.log(error);
+      console.log(error);
+    }
+  };
+
+  const deleteFoodItem = async (id: string) => {
+    try {
+      const response = await axios.delete(
+        `${backendUrl}/api/foodItem/delete/${id}`,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(response);
+      const newFoodItems = foodItems.filter((item) => item._id !== id);
+      setFoodItems(newFoodItems);
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -115,7 +135,7 @@ const RestaurantMenu = () => {
         </div>
         <div className="flex flex-col gap-2">
           <div className="text-xl font-semibold">
-            Select restaurant cuisines
+            Select cuisines for menu items
           </div>
           <div className="flex flex-wrap gap-2 items-center my-2">
             {cuisines?.map((cuisine) => {
@@ -137,7 +157,16 @@ const RestaurantMenu = () => {
         ) : (
           <>
             {foodItems?.map((foodItem) => {
-              return <FoodItemCard key={foodItem._id} foodItem={foodItem} />;
+              return (
+                <FoodItemCard
+                  foodItems={foodItems}
+                  setFoodItems={setFoodItems}
+                  key={foodItem._id}
+                  foodItem={foodItem}
+                  deleteFoodItem={deleteFoodItem}
+                  restaurantCuisines={restaurantCuisines}
+                />
+              );
             })}
           </>
         )}
@@ -222,6 +251,11 @@ const RestaurantMenu = () => {
             </DialogContent>
           </Dialog>
         </div>
+        {foodItems.length >= 5 && (
+          <div className="flex items-center my-4 justify-end">
+            <Button>Next</Button>
+          </div>
+        )}
       </div>
     </>
   );
