@@ -66,7 +66,7 @@ const RestaurantRegister = () => {
         { withCredentials: true }
       );
       console.log(response);
-      navigate('/restaurant/menu');
+      navigate(`/restaurant/menu/${response.data.newRestaurant._id}`);
     } catch (error) {
       console.log(error);
     }

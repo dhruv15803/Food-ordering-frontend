@@ -47,6 +47,7 @@ export type Restaurant = {
 }
 
 export type FoodItem = {
+    _id:string;
     foodItemName:string;
     foodItemDescription:string;
     foodItemPrice:number;
