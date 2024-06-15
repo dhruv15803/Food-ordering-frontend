@@ -17,6 +17,7 @@ import AdminLayout from "./Layout/AdminLayout";
 import AdminCity from "./Pages/AdminCity";
 import RestaurantRegister from "./Pages/RestaurantRegister";
 import ManageRestaurant from "./Pages/ManageRestaurant";
+import RestaurantMenu from "./Pages/RestaurantMenu";
 export const backendUrl = "http://localhost:5000";
 export const GlobalContext = createContext<GlobalContextType | null>(null);
 
@@ -126,6 +127,7 @@ function App() {
               </Route>
               <Route path="restaurant/manage" element={<ManageRestaurant/>}/>
               <Route path="restaurant/register" element={<RestaurantRegister/>}/>
+              <Route path="restaurant/menu/:restaurantId" element={<RestaurantMenu/>}/>
             </Route>
           </Routes>
         </Router>

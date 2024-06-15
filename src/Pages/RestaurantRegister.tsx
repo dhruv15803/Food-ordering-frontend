@@ -6,8 +6,10 @@ import { Label } from "@/components/ui/label";
 import { GlobalContextType } from "@/types";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const RestaurantRegister = () => {
+  const navigate = useNavigate();
   const [restaurantName, setRestaurantName] = useState<string>("");
   const [restaurantCity, setRestaurantCity] = useState<string>("");
   const { cities, setCities, cuisines, setCuisines } = useContext(
@@ -64,6 +66,7 @@ const RestaurantRegister = () => {
         { withCredentials: true }
       );
       console.log(response);
+      navigate('/restaurant/menu');
     } catch (error) {
       console.log(error);
     }

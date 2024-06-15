@@ -3,6 +3,7 @@ import { FoodItem, Restaurant } from "@/types";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { CiLocationOn } from "react-icons/ci";
+import { useNavigate } from "react-router-dom";
 
 type MyRestaurantCardProps = {
   restaurant: Restaurant;
@@ -10,6 +11,7 @@ type MyRestaurantCardProps = {
 
 const MyRestaurantCard = ({ restaurant }: MyRestaurantCardProps) => {
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getFoodItems = async () => {
@@ -31,7 +33,7 @@ const MyRestaurantCard = ({ restaurant }: MyRestaurantCardProps) => {
 
   return (
     <>
-      <div className="flex flex-col p-4 border-2 rounded-lg">
+      <div onClick={() => navigate(`/restaurant/menu/${restaurant._id}`)} className="flex flex-col p-4 border-2 rounded-lg">
         <div className="text-xl font-semibold">{restaurant.restaurantName}</div>
         <div className="flex items-center gap-1">
           <CiLocationOn />
