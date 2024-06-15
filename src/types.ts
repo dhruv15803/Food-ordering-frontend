@@ -34,3 +34,22 @@ export type GlobalContextType = {
     cities:City[];
     setCities:React.Dispatch<SetStateAction<City[]>>;
 }
+
+export type Restaurant = {
+    _id:string;
+    restaurantName:string;
+    restaurantCity:City;
+    restaurantAddressLine1:string;
+    restaurantAddressLine2:string;
+    restaurantThumbnail:string;
+    restaurantImages:string[];
+    restaurantOwner:string;
+}
+
+export type FoodItem = {
+    foodItemName:string;
+    foodItemDescription:string;
+    foodItemPrice:number;
+    foodItemCuisine:Cuisine;
+    restaurantId:Restaurant;
+}

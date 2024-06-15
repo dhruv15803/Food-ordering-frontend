@@ -121,9 +121,6 @@ const RestaurantRegister = () => {
     };
     getFileUrl();
   }, [restaurantThumbnailFile]);
-
-  console.log(restaurantThumbnailFile);
-
   return (
     <>
       <div className="flex items-center w-[80%] mx-auto mt-16 text-2xl font-semibold">
