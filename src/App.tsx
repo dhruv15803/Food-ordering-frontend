@@ -28,7 +28,7 @@ function App() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [cities, setCities] = useState<City[]>([]);
   const [cuisines, setCuisines] = useState<Cuisine[]>([]);
-  
+
   const getLoggedInUser = async () => {
     try {
       setIsLoading(true);
@@ -125,9 +125,15 @@ function App() {
                   }
                 />
               </Route>
-              <Route path="restaurant/manage" element={<ManageRestaurant/>}/>
-              <Route path="restaurant/register" element={<RestaurantRegister/>}/>
-              <Route path="restaurant/menu/:restaurantId" element={<RestaurantMenu/>}/>
+              <Route path="restaurant/manage" element={<ManageRestaurant />} />
+              <Route
+                path="restaurant/register"
+                element={<RestaurantRegister />}
+              />
+              <Route
+                path="restaurant/menu/:restaurantId"
+                element={<RestaurantMenu />}
+              />
             </Route>
           </Routes>
         </Router>

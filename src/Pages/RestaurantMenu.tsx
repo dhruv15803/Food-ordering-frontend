@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Cuisine, FoodItem, GlobalContextType, Restaurant } from "@/types";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
@@ -25,6 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { AlertDialog, AlertDialogAction, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 
 const RestaurantMenu = () => {
   const { restaurantId } = useParams();
@@ -37,6 +38,7 @@ const RestaurantMenu = () => {
   const [foodItemDescription, setFoodItemDescription] = useState<string>("");
   const [foodItemPrice, setFoodItemPrice] = useState<number>(0);
   const [foodItemCuisine, setFoodItemCuisine] = useState<string>("");
+  const navigate = useNavigate();
 
   const addFoodItem = async () => {
     try {
@@ -133,6 +135,9 @@ const RestaurantMenu = () => {
         <div className="text-xl font-semibold my-2">
           {selectedRestaurant.restaurantName} Menu
         </div>
+        {foodItems.length < 5 && <div className="text-red-500 font-semibold">
+          Add atleast 5 menu items to be displayed to customers
+        </div> }
         <div className="flex flex-col gap-2">
           <div className="text-xl font-semibold">
             Select cuisines for menu items
@@ -253,7 +258,20 @@ const RestaurantMenu = () => {
         </div>
         {foodItems.length >= 5 && (
           <div className="flex items-center my-4 justify-end">
-            <Button>Next</Button>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button>Finish</Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Restaurant registered</AlertDialogTitle>
+                  <AlertDialogDescription>The restaurant is displayed to customers. Congratulations</AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                <AlertDialogAction onClick={() => navigate('/restaurant/manage')}>Next</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         )}
       </div>
