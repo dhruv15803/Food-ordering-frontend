@@ -54,3 +54,10 @@ export type FoodItem = {
     foodItemCuisine:Cuisine;
     restaurantId:Restaurant;
 }
+
+export type CartItem = {
+    _id:string;
+    cartItemName:string;
+    cartItemPrice:number;
+    cartItemQty:number;
+}

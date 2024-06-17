@@ -1,12 +1,15 @@
 import { Restaurant } from "@/types";
 import React from "react";
 import { CiLocationOn } from "react-icons/ci";
+import { Button } from "./ui/button";
+import { useNavigate } from "react-router-dom";
 
 type RestaurantCardProps = {
   restaurant: Restaurant;
 };
 
 const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
+    const navigate = useNavigate();
   return (
     <div className="flex border rounded-lg shadow-md p-2 gap-4">
       <div className="w-[20%]">
@@ -22,6 +25,7 @@ const RestaurantCard = ({ restaurant }: RestaurantCardProps) => {
           <span>{restaurant.restaurantAddressLine1}</span>
           <span>{restaurant.restaurantAddressLine2}</span>
         </div>
+        <Button onClick={() => navigate(`/restaurant/results/menu/${restaurant._id}`)} variant="outline">Menu</Button>
       </div>
     </div>
   );
