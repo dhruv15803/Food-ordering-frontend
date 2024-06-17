@@ -1,6 +1,7 @@
 import { backendUrl } from "@/App";
 import CartItemCard from "@/components/CartItemCard";
 import MenuItemCard from "@/components/MenuItemCard";
+import Pagination from "@/components/Pagination";
 import { CartItem, FoodItem, Restaurant } from "@/types";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
@@ -11,6 +12,13 @@ const RestaurantPage = () => {
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const itemsPerPage = 5;
+  const noOfPages = Math.ceil(foodItems.length / itemsPerPage);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = foodItems.slice(indexOfFirstItem, indexOfLastItem);
 
   const addToCart = (item: FoodItem) => {
     setCart((prev) => [
@@ -24,10 +32,10 @@ const RestaurantPage = () => {
     ]);
   };
 
-  const deleteCartItem = (id:string) => {
-    const newCart = cart.filter((item) => item._id!==id);
+  const deleteCartItem = (id: string) => {
+    const newCart = cart.filter((item) => item._id !== id);
     setCart(newCart);
-  }
+  };
 
   const incrementQty = (id: string) => {
     const newCart = cart.map((item) => {
@@ -111,14 +119,26 @@ const RestaurantPage = () => {
       </div>
       <div className="flex">
         <div className="flex flex-col w-[60%] mx-20">
-          <div className="text-2xl font-semibold mb-4">
-            {restaurant?.restaurantName} Menu
+          <div className="mb-4 flex items-center gap-4">
+            <span className="text-2xl font-semibold">
+              {restaurant?.restaurantName} Menu
+            </span>
+            <span className="text-md text-gray-500">
+              ({foodItems.length} dishes available)
+            </span>
           </div>
-          {foodItems?.map((item) => {
+          {currentItems?.map((item) => {
             return (
               <MenuItemCard key={item._id} item={item} addToCart={addToCart} />
             );
           })}
+          {noOfPages > 1 && (
+            <Pagination
+              currentPage={currentPage}
+              noOfPages={noOfPages}
+              setCurrentPage={setCurrentPage}
+            />
+          )}
         </div>
         <div className="flex flex-col w-[40%]">
           <div className="text-xl font-semibold">Cart</div>
