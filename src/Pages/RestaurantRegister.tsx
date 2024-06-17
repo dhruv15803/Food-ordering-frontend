@@ -74,7 +74,6 @@ const RestaurantRegister = () => {
 
   useEffect(() => {
     const filterCitySearch = () => {
-      console.log("function");
       if (restaurantCity.length < 2) {
         setCitiesSuggestions([]);
         return;

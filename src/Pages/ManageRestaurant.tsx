@@ -13,6 +13,19 @@ const ManageRestaurant = () => {
   const [isRestaurantsLoading, setIsRestaurantsLoading] =
     useState<boolean>(false);
 
+  const removeRestaurant = async (id:string) => {
+    try {
+      const response = await axios.delete(`${backendUrl}/api/restaurant/delete/${id}`,{
+        withCredentials:true,
+      })
+      console.log(response);
+      const newRestaurants = myRestaurants.filter((restaurant) => restaurant._id!==id);
+      setMyRestaurants(newRestaurants);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     const getMyRestaurants = async () => {
       try {
@@ -56,6 +69,7 @@ const ManageRestaurant = () => {
                 <MyRestaurantCard
                   key={restaurant._id}
                   restaurant={restaurant}
+                  removeRestaurant={removeRestaurant}
                 />
               );
             })}
