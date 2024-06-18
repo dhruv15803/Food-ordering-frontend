@@ -1,18 +1,36 @@
-import { backendUrl } from "@/App";
+import { GlobalContext, backendUrl } from "@/App";
 import CartItemCard from "@/components/CartItemCard";
 import MenuItemCard from "@/components/MenuItemCard";
 import Pagination from "@/components/Pagination";
 import { Button } from "@/components/ui/button";
-import { CartItem, FoodItem, Restaurant } from "@/types";
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { CartItem, FoodItem, GlobalContextType, Restaurant } from "@/types";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 const RestaurantPage = () => {
   let cartData = JSON.parse(localStorage.getItem("cartData")!);
   if (cartData === null || cartData === undefined) {
     cartData = [];
   }
+  const navigate = useNavigate();
   const { restaurantId } = useParams();
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
@@ -20,6 +38,12 @@ const RestaurantPage = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 5;
   const noOfPages = Math.ceil(foodItems.length / itemsPerPage);
+  const { cities, loggedInUser } = useContext(
+    GlobalContext
+  ) as GlobalContextType;
+  const [addressLine1, setAddressLine1] = useState<string>("");
+  const [addressLine2, setAddressLine2] = useState<string>("");
+  const [city, setCity] = useState<string>("");
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -95,6 +119,27 @@ const RestaurantPage = () => {
     }
     return sum;
   };
+
+
+
+  const checkout = async () => {
+    try {
+      console.log(city,addressLine1,addressLine2);
+      if(addressLine1.trim()==="" || addressLine2.trim()==="" || city.trim()==="") {
+        return;
+      }
+      console.log('Function');
+      const response = await axios.post(`${backendUrl}/api/stripe/checkout`,{
+        cart,
+        restaurantId,
+      })
+      console.log(response);
+      window.location.href = response.data.url;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 
   useEffect(() => {
     const getRestaurantById = async () => {
@@ -197,7 +242,60 @@ const RestaurantPage = () => {
                 <div className="text-2xl font-semibold">Total</div>
                 <div className="text-xl">Rs {getTotalPrice()}</div>
               </div>
-              <Button className="mx-2">Checkout</Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="mx-2">Checkout</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Enter delivery details</DialogTitle>
+                  </DialogHeader>
+                  <div className="flex flex-col gap-1">
+                    <Label>Email</Label>
+                    <Input disabled={true} value={loggedInUser?.email} />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <Label htmlFor="addressLine1">Enter address line 1</Label>
+                    <Input
+                      value={addressLine1}
+                      onChange={(e) => setAddressLine1(e.target.value)}
+                      type="text"
+                      name="addressLine1"
+                      id="addressLine1"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <Label htmlFor="addressLine2">Enter address line 2</Label>
+                    <Input
+                      value={addressLine2}
+                      onChange={(e) => setAddressLine2(e.target.value)}
+                      type="text"
+                      name="addressLine2"
+                      id="addressLine2"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <Label htmlFor="city">Select city</Label>
+                    <Select onValueChange={(value) => setCity(value)}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="City" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {cities?.map((city) => {
+                          return (
+                            <SelectItem key={city._id} value={city.cityName}>
+                              {city.cityName}
+                            </SelectItem>
+                          );
+                        })}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <DialogFooter>
+                    <Button onClick={checkout}>Proceed to checkout</Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </>
           )}
         </div>
