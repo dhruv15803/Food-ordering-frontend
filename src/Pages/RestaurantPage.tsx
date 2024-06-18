@@ -2,16 +2,21 @@ import { backendUrl } from "@/App";
 import CartItemCard from "@/components/CartItemCard";
 import MenuItemCard from "@/components/MenuItemCard";
 import Pagination from "@/components/Pagination";
+import { Button } from "@/components/ui/button";
 import { CartItem, FoodItem, Restaurant } from "@/types";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 const RestaurantPage = () => {
+  let cartData = JSON.parse(localStorage.getItem("cartData")!);
+  if (cartData === null || cartData === undefined) {
+    cartData = [];
+  }
   const { restaurantId } = useParams();
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<CartItem[]>(cartData);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 5;
   const noOfPages = Math.ceil(foodItems.length / itemsPerPage);
@@ -19,17 +24,35 @@ const RestaurantPage = () => {
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = foodItems.slice(indexOfFirstItem, indexOfLastItem);
-
   const addToCart = (item: FoodItem) => {
-    setCart((prev) => [
-      ...prev,
-      {
-        _id: item._id,
-        cartItemName: item.foodItemName,
-        cartItemPrice: item.foodItemPrice,
-        cartItemQty: 1,
-      },
-    ]);
+    // check if item already in cart
+    // if already in cart  then increase quantity
+    // else add cart item
+    let isCartItemExists = false;
+    const newCart = cart.map((cartItem) => {
+      if (cartItem._id === item._id) {
+        isCartItemExists = true;
+        return {
+          ...cartItem,
+          cartItemQty: cartItem.cartItemQty + 1,
+        };
+      } else {
+        return cartItem;
+      }
+    });
+    if (isCartItemExists === false) {
+      setCart((prev) => [
+        ...prev,
+        {
+          _id: item._id,
+          cartItemName: item.foodItemName,
+          cartItemPrice: item.foodItemPrice,
+          cartItemQty: 1,
+        },
+      ]);
+      return;
+    }
+    setCart(newCart);
   };
 
   const deleteCartItem = (id: string) => {
@@ -108,6 +131,13 @@ const RestaurantPage = () => {
     getFoodItems();
   }, [restaurant]);
 
+  useEffect(() => {
+    const settingCartLocalStorage = () => {
+      localStorage.setItem("cartData", JSON.stringify(cart));
+    };
+    settingCartLocalStorage();
+  }, [cart]);
+
   return (
     <>
       <div className="border mx-10 my-16">
@@ -162,10 +192,13 @@ const RestaurantPage = () => {
             </div>
           )}
           {cart.length !== 0 && (
-            <div className="flex items-center my-2  justify-between mx-10">
-              <div className="text-2xl font-semibold">Total</div>
-              <div className="text-xl">Rs {getTotalPrice()}</div>
-            </div>
+            <>
+              <div className="flex items-center my-2  justify-between mx-10">
+                <div className="text-2xl font-semibold">Total</div>
+                <div className="text-xl">Rs {getTotalPrice()}</div>
+              </div>
+              <Button className="mx-2">Checkout</Button>
+            </>
           )}
         </div>
       </div>
