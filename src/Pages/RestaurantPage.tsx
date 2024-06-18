@@ -44,6 +44,7 @@ const RestaurantPage = () => {
   const [addressLine1, setAddressLine1] = useState<string>("");
   const [addressLine2, setAddressLine2] = useState<string>("");
   const [city, setCity] = useState<string>("");
+  const [checkoutErrorMsg,setCheckoutErrorMsg] = useState<string>("");
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -120,27 +121,39 @@ const RestaurantPage = () => {
     return sum;
   };
 
-
-
   const checkout = async () => {
     try {
-      console.log(city,addressLine1,addressLine2);
-      if(addressLine1.trim()==="" || addressLine2.trim()==="" || city.trim()==="") {
+      console.log(city, addressLine1, addressLine2);
+      if (
+        addressLine1.trim() === "" ||
+        addressLine2.trim() === "" ||
+        city.trim() === ""
+      ) {
+        setCheckoutErrorMsg("Please enter your address details");
+        setTimeout(() => {
+          setCheckoutErrorMsg("");
+        },4000)
         return;
       }
-      console.log('Function');
-      const response = await axios.post(`${backendUrl}/api/stripe/checkout`,{
+      console.log(city,restaurant?.restaurantCity.cityName);
+      if(city!==restaurant?.restaurantCity.cityName) {
+        setCheckoutErrorMsg("Cannot deliver outside restaurant's city");
+        setTimeout(() => {
+          setCheckoutErrorMsg("");
+        },4000)
+        return;
+      }
+      const response = await axios.post(`${backendUrl}/api/stripe/checkout`, {
         cart,
         restaurantId,
-      })
+      });
       console.log(response);
       window.location.href = response.data.url;
     } catch (error) {
       console.log(error);
     }
-  }
-
-
+  };
+    
   useEffect(() => {
     const getRestaurantById = async () => {
       const response = await axios.get(
@@ -291,6 +304,7 @@ const RestaurantPage = () => {
                       </SelectContent>
                     </Select>
                   </div>
+                  {checkoutErrorMsg!=="" && <div className="text-red-500 my-2">{checkoutErrorMsg}</div>}
                   <DialogFooter>
                     <Button onClick={checkout}>Proceed to checkout</Button>
                   </DialogFooter>
