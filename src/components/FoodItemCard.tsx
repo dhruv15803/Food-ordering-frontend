@@ -103,11 +103,12 @@ const FoodItemCard = ({
         <div>
           {isFoodItemEdit ? (
             <>
-              {restaurantCuisines.length!==0 ?  <Select value={newFoodItemCuisine} onValueChange={(value) => setNewFoodItemCuisine(value)}>
+              <Select value={newFoodItemCuisine} onValueChange={(value) => setNewFoodItemCuisine(value)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Cuisine" />
                 </SelectTrigger>
                 <SelectContent>
+                <SelectItem value={foodItem.foodItemCuisine.cuisineName}>{foodItem.foodItemCuisine.cuisineName}</SelectItem>
                   {restaurantCuisines?.map((cuisine) => {
                     return (
                       <SelectItem key={cuisine._id} value={cuisine.cuisineName}>
@@ -116,7 +117,7 @@ const FoodItemCard = ({
                     );
                   })}
                 </SelectContent>
-              </Select> : <><div className="text-red-500">Please select cuisines</div></>}
+              </Select>
             </>
           ) : (
             foodItem.foodItemCuisine.cuisineName

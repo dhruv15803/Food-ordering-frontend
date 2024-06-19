@@ -26,12 +26,13 @@ import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 const RestaurantPage = () => {
-  let cartData = JSON.parse(localStorage.getItem("cartData")!);
-  if (cartData === null || cartData === undefined) {
+  const { restaurantId } = useParams();
+  let cartData = JSON.parse(localStorage.getItem(`cartData-${restaurantId}`)!);
+  if(cartData===undefined || cartData===null) {
     cartData = [];
   }
+
   const navigate = useNavigate();
-  const { restaurantId } = useParams();
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
   const [cart, setCart] = useState<CartItem[]>(cartData);
@@ -146,24 +147,28 @@ const RestaurantPage = () => {
       const response = await axios.post(`${backendUrl}/api/stripe/checkout`, {
         cart,
         restaurantId,
-      });
+        total:getTotalPrice(),
+        addressLine1,
+        addressLine2,
+        city,
+      },{withCredentials:true});
       console.log(response);
       window.location.href = response.data.url;
     } catch (error) {
       console.log(error);
     }
   };
-    
+
   useEffect(() => {
     const getRestaurantById = async () => {
-      const response = await axios.get(
-        `${backendUrl}/api/restaurant/getRestaurantById/${restaurantId}`,
-        {
-          withCredentials: true,
-        }
-      );
-      console.log(response);
-      setRestaurant(response.data.restaurant);
+      try {
+        const response = await axios.get(
+          `${backendUrl}/api/restaurant/getRestaurantById/${restaurantId}`);
+        console.log(response);
+        setRestaurant(response.data.restaurant);
+      } catch (error) {
+        console.log(error);
+      }
     };
     getRestaurantById();
   }, [restaurantId]);
@@ -190,11 +195,12 @@ const RestaurantPage = () => {
   }, [restaurant]);
 
   useEffect(() => {
-    const settingCartLocalStorage = () => {
-      localStorage.setItem("cartData", JSON.stringify(cart));
-    };
-    settingCartLocalStorage();
-  }, [cart]);
+    const setLocalCartStorage = () => {
+      if(restaurantId===null) return;
+      localStorage.setItem(`cartData-${restaurantId}`,JSON.stringify(cart));
+    }
+    setLocalCartStorage();
+  },[cart,restaurantId])
 
   return (
     <>
