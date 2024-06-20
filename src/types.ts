@@ -66,3 +66,24 @@ export type CartItem = {
     cartItemQty:number;
 }
 
+export type OrderItem = {
+    orderItemName:string;
+    orderItemPrice:string;
+    orderItemQty:string;
+}
+
+export type Order = {
+    _id:string;
+    orderItems:OrderItem[],
+    deliveryDetails:{
+        email:string;
+        addressLine1:string;
+        addressLine2:string;
+        city:string;
+    },
+    userId:string;
+    orderStatus:'PLACED' | 'PAID' | 'FAILED' | "inProgress" | "outForDelivery" | "delivered";
+    orderTotal:number;
+    restaurant:Restaurant;
+}
+

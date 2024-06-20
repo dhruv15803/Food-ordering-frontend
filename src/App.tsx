@@ -20,6 +20,7 @@ import ManageRestaurant from "./Pages/ManageRestaurant";
 import RestaurantMenu from "./Pages/RestaurantMenu";
 import RestaurantResults from "./Pages/RestaurantResults";
 import RestaurantPage from "./Pages/RestaurantPage";
+import MyOrders from "./Pages/MyOrders";
 export const backendUrl = "http://localhost:5000";
 export const GlobalContext = createContext<GlobalContextType | null>(null);
 
@@ -151,6 +152,7 @@ function App() {
                 path="restaurant/results/menu/:restaurantId"
                 element={<RestaurantPage />}
               />
+              <Route path="orders" element={<MyOrders/>}/>
             </Route>
           </Routes>
         </Router>
