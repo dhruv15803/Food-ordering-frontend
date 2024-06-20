@@ -30,6 +30,8 @@ const Navbar = () => {
       console.log(response);
       setIsLoggedIn(false);
       setLoggedInUser(null);
+      localStorage.clear();
+      navigate('/');
     } catch (error) {
       console.log(error);
     }

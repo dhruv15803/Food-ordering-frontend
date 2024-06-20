@@ -33,6 +33,10 @@ export type GlobalContextType = {
     setCuisines:React.Dispatch<SetStateAction<Cuisine[]>>;
     cities:City[];
     setCities:React.Dispatch<SetStateAction<City[]>>;
+    isCheckoutLogin:boolean;
+    setIsCheckoutLogin:React.Dispatch<SetStateAction<boolean>>;
+    checkoutRestaurantId:string;
+    setCheckoutRestaurantId:React.Dispatch<SetStateAction<string>>;
 }
 
 export type Restaurant = {
@@ -61,3 +65,4 @@ export type CartItem = {
     cartItemPrice:number;
     cartItemQty:number;
 }
+

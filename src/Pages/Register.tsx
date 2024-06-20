@@ -19,7 +19,7 @@ const Register = () => {
     []
   );
   const [registerErrorMsg, setRegisterErrorMsg] = useState<string>("");
-  const {setLoggedInUser,setIsLoggedIn,setIsAdmin} = useContext(GlobalContext) as GlobalContextType;
+  const {setLoggedInUser,setIsLoggedIn,setIsAdmin,isCheckoutLogin,checkoutRestaurantId} = useContext(GlobalContext) as GlobalContextType;
   const navigate = useNavigate();
 
   // validate password requirements:-
@@ -122,7 +122,11 @@ const Register = () => {
       setLoggedInUser(response.data.newUser);
       setIsLoggedIn(true);
       setIsAdmin(response.data.newUser.isAdmin);
-      navigate('/');
+      if(isCheckoutLogin) {
+        navigate(`/restaurant/results/${checkoutRestaurantId}`);
+      } else {
+        navigate('/');
+      }
     } catch (error:any) {
       console.log(error);
       setRegisterErrorMsg(error.response.data.message);

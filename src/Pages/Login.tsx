@@ -13,7 +13,7 @@ const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loginErrorMsg,setLoginErrorMsg] = useState<string>("");
-  const {setIsLoggedIn,setLoggedInUser,setIsAdmin} = useContext(GlobalContext) as GlobalContextType;
+  const {setIsLoggedIn,setLoggedInUser,setIsAdmin,isCheckoutLogin,checkoutRestaurantId,setIsCheckoutLogin,setCheckoutRestaurantId} = useContext(GlobalContext) as GlobalContextType;
   const navigate = useNavigate();
 
   const loginUser = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -34,7 +34,13 @@ const Login = () => {
       setIsLoggedIn(true);
       setLoggedInUser(response.data.user);
       setIsAdmin(response.data.user.isAdmin);
-      navigate('/');
+      if(isCheckoutLogin) {
+        setIsCheckoutLogin(false);
+        setCheckoutRestaurantId("");
+        navigate(`/restaurant/results/menu/${checkoutRestaurantId}`);
+      } else {
+        navigate('/');
+      }
     } catch (error:any) {
       console.log(error);
       setLoginErrorMsg(error.response.data.message);

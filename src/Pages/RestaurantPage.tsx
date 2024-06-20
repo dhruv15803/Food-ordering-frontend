@@ -27,11 +27,13 @@ import { useNavigate, useParams } from "react-router-dom";
 
 const RestaurantPage = () => {
   const { restaurantId } = useParams();
+  const { cities, loggedInUser,isLoggedIn,setIsCheckoutLogin,setCheckoutRestaurantId } = useContext(
+    GlobalContext
+  ) as GlobalContextType;
   let cartData = JSON.parse(localStorage.getItem(`cartData-${restaurantId}`)!);
   if(cartData===undefined || cartData===null) {
     cartData = [];
   }
-
   const navigate = useNavigate();
   const [restaurant, setRestaurant] = useState<Restaurant | null>(null);
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
@@ -39,14 +41,10 @@ const RestaurantPage = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const itemsPerPage = 5;
   const noOfPages = Math.ceil(foodItems.length / itemsPerPage);
-  const { cities, loggedInUser } = useContext(
-    GlobalContext
-  ) as GlobalContextType;
   const [addressLine1, setAddressLine1] = useState<string>("");
   const [addressLine2, setAddressLine2] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [checkoutErrorMsg,setCheckoutErrorMsg] = useState<string>("");
-
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = foodItems.slice(indexOfFirstItem, indexOfLastItem);
@@ -261,7 +259,8 @@ const RestaurantPage = () => {
                 <div className="text-2xl font-semibold">Total</div>
                 <div className="text-xl">Rs {getTotalPrice()}</div>
               </div>
-              <Dialog>
+              {isLoggedIn ? <>
+                <Dialog>
                 <DialogTrigger asChild>
                   <Button className="mx-2">Checkout</Button>
                 </DialogTrigger>
@@ -316,6 +315,13 @@ const RestaurantPage = () => {
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
+              </>:<>
+              <Button onClick={ () => {
+                setIsCheckoutLogin(true);
+                setCheckoutRestaurantId(restaurantId!);
+                navigate('/login');
+              }}>Login before checkout</Button>
+              </>}
             </>
           )}
         </div>

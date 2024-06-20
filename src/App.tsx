@@ -30,6 +30,9 @@ function App() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [cities, setCities] = useState<City[]>([]);
   const [cuisines, setCuisines] = useState<Cuisine[]>([]);
+  const [isCheckoutLogin,setIsCheckoutLogin] = useState<boolean>(false);
+  const [checkoutRestaurantId,setCheckoutRestaurantId] = useState<string>("");
+
 
   const getLoggedInUser = async () => {
     try {
@@ -99,6 +102,10 @@ function App() {
           setCuisines,
           cities,
           setCities,
+          isCheckoutLogin,
+          setIsCheckoutLogin,
+          checkoutRestaurantId,
+          setCheckoutRestaurantId,
         }}
       >
         <Router>
