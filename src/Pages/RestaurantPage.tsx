@@ -152,6 +152,7 @@ const RestaurantPage = () => {
       },{withCredentials:true});
       console.log(response);
       window.location.href = response.data.url;
+      setCart([]);
     } catch (error) {
       console.log(error);
     }
