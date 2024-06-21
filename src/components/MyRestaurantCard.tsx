@@ -18,10 +18,13 @@ import { Input } from "./ui/input";
 
 type MyRestaurantCardProps = {
   restaurant: Restaurant;
-  removeRestaurant:(id:string) => Promise<void>;
+  removeRestaurant: (id: string) => Promise<void>;
 };
 
-const MyRestaurantCard = ({ restaurant ,removeRestaurant}: MyRestaurantCardProps) => {
+const MyRestaurantCard = ({
+  restaurant,
+  removeRestaurant,
+}: MyRestaurantCardProps) => {
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
   const [restaurantNameConfirm, setRestaurantNameConfirm] =
     useState<string>("");
@@ -92,13 +95,16 @@ const MyRestaurantCard = ({ restaurant ,removeRestaurant}: MyRestaurantCardProps
               <DialogFooter>
                 {restaurantNameConfirm === restaurant.restaurantName && (
                   <>
-                    <Button onClick={() => removeRestaurant(restaurant._id)}>Remove</Button>
+                    <Button onClick={() => removeRestaurant(restaurant._id)}>
+                      Remove
+                    </Button>
                   </>
                 )}
               </DialogFooter>
             </DialogContent>
           </Dialog>
         </div>
+        <Button onClick={() => navigate(`/restaurant/orders/${restaurant._id}`)} className="mx-4">View orders</Button>
       </div>
     </>
   );
