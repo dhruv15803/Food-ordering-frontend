@@ -15,7 +15,7 @@ import {
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
 import axios from "axios";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu";
 
 const Navbar = () => {
   const navigate = useNavigate();

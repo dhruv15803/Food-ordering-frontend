@@ -2,18 +2,15 @@ import { GlobalContext, backendUrl } from "@/App";
 import CuisineCheckbox from "@/components/CuisineCheckbox";
 import FoodItemCard from "@/components/FoodItemCard";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Cuisine, FoodItem, GlobalContextType, Restaurant } from "@/types";
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import  { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
-  DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";

@@ -2,7 +2,7 @@ import { backendUrl } from '@/App'
 import MyOrderCard from '@/components/MyOrderCard';
 import { Order } from '@/types';
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 
 const MyOrders = () => {
     const [orders,setOrders] = useState<Order[]>([]);

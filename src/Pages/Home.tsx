@@ -6,12 +6,11 @@ import landingImage from "../assets/landing.png";
 import appDownloadImage from "../assets/appDownload.png";
 import { useNavigate } from "react-router-dom";
 import { GlobalContext } from "@/App";
-import { City, GlobalContextType } from "@/types";
-import { DropdownMenu } from "@/components/ui/dropdown-menu";
+import { GlobalContextType } from "@/types";
 
 const Home = () => {
   const [searchCity, setSearchCity] = useState<string>("");
-  const { cities, setCities } = useContext(GlobalContext) as GlobalContextType;
+  const {cities} = useContext(GlobalContext) as GlobalContextType;
   const [citiesSuggestions, setCitiesSuggestions] = useState<string[]>([]);
   const [cityErrorMsg, setCityErrorMsg] = useState<string>("");
   const navigate = useNavigate();
