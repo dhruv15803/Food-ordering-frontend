@@ -1,7 +1,7 @@
 import { backendUrl } from "@/App";
 import { FoodItem, Restaurant } from "@/types";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import { CiLocationOn } from "react-icons/ci";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";

@@ -1,9 +1,5 @@
 import { CartItem } from "@/types";
-import React from "react";
-import { FaArrowLeft, FaArrowRight, FaTrash } from "react-icons/fa";
-import { Button } from "./ui/button";
-import { IoIosArrowForward } from "react-icons/io";
-import { IoIosArrowBack } from "react-icons/io";
+import {FaTrash } from "react-icons/fa";
 
 type CartItemCardProps = {
   item: CartItem;

@@ -1,5 +1,4 @@
 import { FoodItem } from "@/types";
-import React from "react";
 import { BiSolidDish } from "react-icons/bi";
 import { Button } from "./ui/button";
 import { FaShoppingCart } from "react-icons/fa";
