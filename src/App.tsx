@@ -22,7 +22,7 @@ import RestaurantResults from "./Pages/RestaurantResults";
 import RestaurantPage from "./Pages/RestaurantPage";
 import MyOrders from "./Pages/MyOrders";
 import RestaurantOrders from "./Pages/RestaurantOrders";
-export const backendUrl = "http://localhost:5000";
+export const backendUrl = "https://food-ordering-backend-2ali.onrender.com";
 export const GlobalContext = createContext<GlobalContextType | null>(null);
 
 function App() {
